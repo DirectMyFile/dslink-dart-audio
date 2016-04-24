@@ -7,6 +7,7 @@ import "driver.dart";
 part "src/nodes/sox.dart";
 part "src/nodes/ffmpeg.dart";
 part "src/nodes/dsa.dart";
+part "src/nodes/alsa.dart";
 
 Requester requester;
 List<Function> callReadyList = [];
@@ -16,7 +17,9 @@ final Map<String, NodeFactory> FACTORIES = {
   "ffmpegMacAudioInput": (String path) => new FfmpegMacAudioInputNode(path),
   "dsaAudioInput": (String path) => new DsaAudioInputNode(path),
   "dsaAudioOutput": (String path) => new DsaAudioOutputNode(path),
-  "audioLink": (String path) => new AudioLinkNode(path)
+  "audioLink": (String path) => new AudioLinkNode(path),
+  "alsaAudioOutput": (String path) => new AlsaAudioOutputNode(path),
+  "alsaAudioInput": (String path) => new AlsaAudioInputNode(path)
 };
 
 abstract class AudioNode extends SimpleNode {
