@@ -2,6 +2,7 @@ part of dslink.audio.nodes;
 
 class SoxAudioOutputNode extends AudioOutputNode {
   int channels;
+  int sampleRate;
   String driver;
 
   SoxAudioOutputNode(String path) : super(path);
@@ -10,6 +11,7 @@ class SoxAudioOutputNode extends AudioOutputNode {
   void loadSettings(Map<String, dynamic> map) {
     channels = map["channels"];
     driver = map["driver"];
+    sampleRate = map["sampleRate"];
   }
 
   @override
@@ -26,6 +28,11 @@ class SoxAudioOutputNode extends AudioOutputNode {
       "name": "channels",
       "type": "number",
       "default": 4
+    },
+    {
+      "name": "sampleRate",
+      "type": "number",
+      "default": 8000
     },
     {
       "name": "driver",

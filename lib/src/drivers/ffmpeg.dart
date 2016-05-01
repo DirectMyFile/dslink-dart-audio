@@ -52,6 +52,8 @@ class FfmpegMacAudioInput extends FfmpegAudioInput {
       "-vn",
       "-f",
       "u16le",
+      "-ar",
+      "8000",
       "-"
     ];
 
