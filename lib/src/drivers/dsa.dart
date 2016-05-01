@@ -10,21 +10,9 @@ class DsaAudioInput extends AudioInput {
 
   @override
   Stream<List<int>> read() {
-    var controller = new StreamController<List<int>>();
-    _sub = requester.invoke("${path}/readAudioData").listen((RequesterInvokeUpdate update) {
-      if (update.streamStatus == "closed") {
-        controller.close();
-        return;
-      }
-
-      for (var u in update.updates) {
-        if (u.length > 0 && u[0] is ByteData) {
-          ByteData d = u[0];
-          controller.add(d.buffer.asUint8List());
-        }
-      }
-    });
-    return controller.stream;
+    return requester.onValueChange("${path}/audioData").where((update) {
+      return update.value is ByteData && (update.value as ByteData).lengthInBytes > 0;
+    }).map((update) => (update.value as ByteData).buffer.asUint8List());
   }
 
   @override
@@ -45,19 +33,26 @@ class DsaAudioOutput extends AudioOutput {
   StreamController<List<int>> _controller;
 
   DsaAudioOutput(this.node) {
-    var san = new SimpleActionNode("${node.path}/readAudioData", (Map<String, dynamic> params) async {
-      return _controller.stream.map((bytes) {
-        var ui = bytes is Uint8List ? bytes : new Uint8List.fromList(bytes);
-        return [[ui.buffer.asByteData()]];
-      });
-    });
+    var san = new SimpleNode("${node.path}/audioData");
 
     san.load({
-      r"$name": "Read Audio Data",
-      r"$invokable": "read"
+      r"$name": "Audio Data",
+      r"$type": "binary"
     });
 
-    node.provider.setNode("${node.path}/readAudioData", san);
+    _controller.stream.listen((data) {
+      Uint8List byteList;
+
+      if (data is Uint8List) {
+        byteList = data;
+      } else {
+        byteList = new Uint8List.fromList(data);
+      }
+
+      san.updateValue(byteList);
+    });
+
+    node.provider.setNode("${node.path}/audioData", san);
   }
 
   @override
