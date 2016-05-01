@@ -32,13 +32,26 @@ class DsaAudioOutput extends AudioOutput {
 
   StreamController<List<int>> _controller;
 
-  DsaAudioOutput(this.node) {
-    var san = new SimpleNode("${node.path}/audioData");
+  SimpleNode _dataNode;
 
-    san.load({
+  DsaAudioOutput(this.node) {
+    _dataNode = new SimpleNode("${node.path}/audioData");
+
+    _dataNode.load({
       r"$name": "Audio Data",
       r"$type": "binary"
     });
+
+    node.provider.setNode("${node.path}/audioData", _dataNode);
+  }
+
+  @override
+  Future start() async {
+    if (_controller != null) {
+      _controller.close();
+      _controller = null;
+    }
+    _controller = new StreamController.broadcast();
 
     _controller.stream.listen((data) {
       Uint8List byteList;
@@ -49,19 +62,8 @@ class DsaAudioOutput extends AudioOutput {
         byteList = new Uint8List.fromList(data);
       }
 
-      san.updateValue(byteList);
+      _dataNode.updateValue(byteList);
     });
-
-    node.provider.setNode("${node.path}/audioData", san);
-  }
-
-  @override
-  Future start() async {
-    if (_controller != null) {
-      _controller.close();
-      _controller = null;
-    }
-    _controller = new StreamController.broadcast();
   }
 
   @override
