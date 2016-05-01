@@ -13,7 +13,7 @@ class AlsaAudioInput extends AudioInput {
       await stop();
     }
 
-    var args = ["-traw", "-r8000"];
+    var args = ["-traw", "-r8000", "-c2"];
 
     if (deviceName != null && deviceName != "default") {
       args.addAll(["-D", deviceName]);
@@ -45,7 +45,7 @@ class AlsaAudioOutput extends AudioOutput {
 
   @override
   Future start() async {
-    var args = ["-traw", "-r8000"];
+    var args = ["-traw", "-r8000", "-c2"];
 
     if (deviceName != null && deviceName != "default") {
       args.addAll(["-D", deviceName]);
