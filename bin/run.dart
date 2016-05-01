@@ -7,18 +7,20 @@ LinkProvider link;
 
 main(List<String> args) async {
   var p = new SimpleNodeProvider();
-  link = new LinkProvider(args, "Audio-", nodes: {
-  },
+  link = new LinkProvider(
+    args,
+    "Audio-",
     profiles: {
-      "remove": (String path) => new DeleteActionNode.forParent(
-        path, p, onDelete: () {
+      "remove": (String path) => new DeleteActionNode.forParent(path, p, onDelete: () {
         link.save();
       })
     },
     autoInitialize: false,
     provider: p,
     isRequester: true,
-    isResponder: true);
+    isResponder: true,
+    encodePrettyJson: true
+  );
 
   link.configure();
 

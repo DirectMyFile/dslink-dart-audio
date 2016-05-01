@@ -3,7 +3,7 @@ import "dart:async";
 import "package:dslink_audio/driver.dart";
 
 main() async {
-  var input = new FfmpegMacAudioInput("1:2");
+  var input = new FfmpegMacAudioInput("1:3");
   var output = new FileAudioOutput.forPath("out.wav");
 
   input.pipe(output);
