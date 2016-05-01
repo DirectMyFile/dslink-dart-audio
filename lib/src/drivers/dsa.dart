@@ -62,7 +62,7 @@ class DsaAudioOutput extends AudioOutput {
         byteList = new Uint8List.fromList(data);
       }
 
-      _dataNode.updateValue(byteList);
+      _dataNode.updateValue(byteList.buffer.asUint8List());
     });
   }
 
