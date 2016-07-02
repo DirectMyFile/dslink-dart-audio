@@ -10,7 +10,7 @@ class DsaAudioInput extends AudioInput {
 
   @override
   Stream<List<int>> read() {
-    return requester.onValueChange("${path}/audioData").where((update) {
+    return requester.onValueChange("${path}/audioData", 1).where((update) {
       return update.value is ByteData && (update.value as ByteData).lengthInBytes > 0;
     }).map((update) => (update.value as ByteData).buffer.asUint8List());
   }

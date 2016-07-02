@@ -32,7 +32,7 @@ class SoxAudioOutputNode extends AudioOutputNode {
     {
       "name": "sampleRate",
       "type": "number",
-      "default": 8000
+      "default": 44100
     },
     {
       "name": "driver",

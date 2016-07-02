@@ -7,7 +7,7 @@ class SoxAudioOutput extends AudioOutput {
   final List<String> driverArgs;
 
   SoxAudioOutput({
-    this.sampleRate: 16000,
+    this.sampleRate: 44100,
     this.channels: 1,
     this.driver,
     this.driverArgs
