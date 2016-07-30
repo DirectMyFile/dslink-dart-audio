@@ -51,9 +51,13 @@ class FfmpegMacAudioInput extends FfmpegAudioInput {
       device,
       "-vn",
       "-f",
-      "u16le",
+      "s16le",
       "-ar",
-      "8000",
+      "44100",
+      "-acodec",
+      "pcm_s16le",
+      "-ac",
+      "1",
       "-"
     ];
 

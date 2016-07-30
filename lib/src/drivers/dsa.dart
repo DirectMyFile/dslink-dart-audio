@@ -12,7 +12,14 @@ class DsaAudioInput extends AudioInput {
   Stream<List<int>> read() {
     return requester.onValueChange("${path}/audioData", 1).where((update) {
       return update.value is ByteData && (update.value as ByteData).lengthInBytes > 0;
-    }).map((update) => (update.value as ByteData).buffer.asUint8List());
+    }).map((update) {
+      ByteData data = update.value;
+
+      return data.buffer.asUint8List(
+        data.offsetInBytes,
+        data.lengthInBytes
+      );
+    });
   }
 
   @override
@@ -51,7 +58,7 @@ class DsaAudioOutput extends AudioOutput {
       _controller.close();
       _controller = null;
     }
-    _controller = new StreamController.broadcast();
+    _controller = new StreamController<List<int>>.broadcast();
 
     _controller.stream.listen((data) {
       Uint8List byteList;
@@ -62,7 +69,10 @@ class DsaAudioOutput extends AudioOutput {
         byteList = new Uint8List.fromList(data);
       }
 
-      _dataNode.updateValue(byteList.buffer.asByteData());
+      _dataNode.updateValue(byteList.buffer.asByteData(
+        byteList.offsetInBytes,
+        byteList.lengthInBytes
+      ));
     });
   }
 

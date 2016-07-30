@@ -22,16 +22,15 @@ class SoxAudioOutput extends AudioOutput {
     }
 
     var args = [
-      "-traw",
+      "-ts16",
       "-r",
       "${sampleRate}",
-      "-b",
-      "16",
-      "-S",
       "-e",
-      "unsigned-integer",
+      "signed-integer",
       "-c",
       "${channels}",
+      "--endian",
+      "little",
       "-"
     ];
 
@@ -52,7 +51,6 @@ class SoxAudioOutput extends AudioOutput {
     }
 
     _process = await Process.start("sox", args, runInShell: true);
-
     _process.exitCode.then((_) {
       _process = null;
     });
